@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">easemobDemo</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="no_warning">no_warning</string>
+    <string name="user_name">User name</string>
+    <string name="password">Password</string>
+    <string name="confirmpassword">Confirm password</string>
+    <string name="register">Register</string>
+    <string name="login">Login</string>
+    
+    <string name="user_name_cannot_be_empty">User name cannot be empty!</string>
+    <string name="password_cannot_be_empty">Password cannot be empty!</string>
+    <string name="confirm_password_cannot_be_empty">Confirm password cannot be empty!</string>
+    <string name="two_input_password">Inconsistent password, please enter again!</string>   
+    <string name="network_isnot_available">The network is not available</string>
+    
+</resources>
