@@ -9,11 +9,14 @@
     <string name="confirmpassword">Confirm password</string>
     <string name="register">Register</string>
     <string name="login">Login</string>
-    
+    <string name="is_landing">logining..</string>
     <string name="user_name_cannot_be_empty">User name cannot be empty!</string>
     <string name="password_cannot_be_empty">Password cannot be empty!</string>
     <string name="confirm_password_cannot_be_empty">Confirm password cannot be empty!</string>
-    <string name="two_input_password">Inconsistent password, please enter again!</string>   
+    <string name="two_input_password">Inconsistent password, please enter again!</string>
     <string name="network_isnot_available">The network is not available</string>
-    
+    <string name="default_number">7</string>
+    <string name="setting">setting</string>
+    <string name="exit">exit</string>
+
 </resources>

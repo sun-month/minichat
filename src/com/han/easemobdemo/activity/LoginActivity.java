@@ -1,6 +1,9 @@
 package com.han.easemobdemo.activity;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
+import android.content.DialogInterface;
+import android.content.DialogInterface.OnCancelListener;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -18,6 +21,7 @@ import com.han.easemobdemo.utils.CommonUtils;
 public class LoginActivity extends Activity {
 	private EditText usernameEditText;
 	private EditText passwordEditText;
+	private boolean progressShow = true;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -49,16 +53,41 @@ public class LoginActivity extends Activity {
 			return;
 		}
 
+		final ProgressDialog pd = new ProgressDialog(this);
+		pd.setCanceledOnTouchOutside(false);
+		pd.setOnCancelListener(new OnCancelListener() {
+
+			@Override
+			public void onCancel(DialogInterface dialog) {
+				progressShow = false;
+			}
+		});
+		pd.setMessage(getString(R.string.is_landing));
+		pd.show();
+
 		EMChatManager.getInstance().login(currentUsername, currentPassword,
 				new EMCallBack() {
 					@Override
 					public void onSuccess() {
+
+						if (!progressShow) {
+							return;
+						}
+
 						runOnUiThread(new Runnable() {
 							public void run() {
 								EMGroupManager.getInstance().loadAllGroups();
 								EMChatManager.getInstance()
 										.loadAllConversations();
 								Log.d("main", "登录聊天服务器成功！");
+								if (!LoginActivity.this.isFinishing()
+										&& pd.isShowing()) {
+									pd.dismiss();
+								}
+								Intent intent = new Intent(LoginActivity.this,
+										MainActivity.class);
+								startActivity(intent);
+								finish();
 							}
 						});
 					}
