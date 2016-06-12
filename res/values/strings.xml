@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name">easemobDemo</string>
+    <string name="app_name">minichat</string>
     <string name="hello_world">Hello world!</string>
     <string name="no_warning">no_warning</string>
     <string name="user_name">User name</string>

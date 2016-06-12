@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.han.easemobdemo"
+    package="com.han.chat"
     android:versionCode="1"
     android:versionName="1.0" >
 
@@ -26,7 +26,7 @@
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
 
     <application
-        android:name="com.han.easemobdemo.MyApplication"
+        android:name="com.han.chat.MiniChatApplication"
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
@@ -34,12 +34,12 @@
 
         <!-- 主界面 -->
         <activity
-            android:name="com.han.easemobdemo.activity.MainActivity"
+            android:name="com.han.chat.activity.MainActivity"
             android:label="@string/app_name" >
         </activity>
 
         <!-- 登录界面 -->
-        <activity android:name="com.han.easemobdemo.activity.LoginActivity" >
+        <activity android:name="com.han.chat.activity.LoginActivity" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -48,11 +48,11 @@
         </activity>
 
         <!-- 注册界面 -->
-        <activity android:name="com.han.easemobdemo.activity.RegisterActivity" >
+        <activity android:name="com.han.chat.activity.RegisterActivity" >
         </activity>
 
         <!-- 聊天界面 -->
-        <activity android:name="com.han.easemobdemo.activity.ChatActivity" >
+        <activity android:name="com.han.chat.activity.ChatActivity" >
         </activity>
 
         <!-- 设置环信应用的AppKey -->
