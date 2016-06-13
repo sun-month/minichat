@@ -101,6 +101,7 @@ public class LoginActivity extends Activity {
 		pd.setMessage(getString(R.string.is_landing));
 		pd.show();
 
+		// 调用环信SDK的登录方法，登录环信服务器
 		EMChatManager.getInstance().login(currentUsername, currentPassword,
 				new EMCallBack() {
 					@Override
@@ -117,21 +118,20 @@ public class LoginActivity extends Activity {
 								currentPassword);
 
 						try {
+							// 登录进入主界面前，加载所有本地群和会话
 							EMGroupManager.getInstance().loadAllGroups();
 							EMChatManager.getInstance().loadAllConversations();
 							// 进入主页面前，处理好友和群组
 							initializeContacts();
 						} catch (Exception e) {
-							// TODO Auto-generated catch block
-							e.printStackTrace();
+							Log.d("error", e.getMessage());
 							// 获取好有和群组失败，不让进入主页面
 							runOnUiThread(new Runnable() {
 
 								@Override
 								public void run() {
 									pd.dismiss();
-									MiniChatApplication.getInstance().logout(
-											true, null);
+									MiniChatApplication.getInstance().logout(true, null);
 									Toast.makeText(getApplicationContext(),
 											R.string.login_failure_failed,
 											Toast.LENGTH_LONG).show();
@@ -190,29 +190,30 @@ public class LoginActivity extends Activity {
 
 	private void initializeContacts() {
 		Map<String, User> userlist = new HashMap<String, User>();
-		
-		//添加user"申请与通知"
+
+		// 添加user"申请与通知"
 		User newFriends = new User();
 		newFriends.setUsername(Constant.NEW_FRIENDS_USERNAME);
-		String strChat = getResources().getString(R.string.Application_and_notify);
+		String strChat = getResources().getString(
+				R.string.Application_and_notify);
 		newFriends.setNick(strChat);
 		userlist.put(Constant.NEW_FRIENDS_USERNAME, newFriends);
-		
-		//添加"群聊"
+
+		// 添加"群聊"
 		User groupUser = new User();
 		groupUser.setUsername(Constant.GROUP_USERNAME);
 		String strGroup = getResources().getString(R.string.group_chat);
 		groupUser.setNick(strGroup);
 		groupUser.setHeader("");
 		userlist.put(Constant.GROUP_USERNAME, groupUser);
-		
-		//添加“Robot”,do something
-		
-		//存入内存
-		((ChatHXSDKHelper)HXSDKHelper.getInstance()).setContactList(userlist);
-		
-		//存入db
-		
+
+		// 添加“Robot”,do something
+
+		// 存入内存
+		((ChatHXSDKHelper) HXSDKHelper.getInstance()).setContactList(userlist);
+
+		// 存入db,调用sqlite
+
 	}
 
 	public void register(View view) {
