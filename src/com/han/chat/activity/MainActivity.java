@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentTransaction;
+import android.text.TextUtils;
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;
@@ -27,9 +28,12 @@ import com.easemob.easeui.ui.EaseContactListFragment;
 import com.easemob.easeui.ui.EaseContactListFragment.EaseContactListItemClickListener;
 import com.easemob.easeui.ui.EaseConversationListFragment;
 import com.easemob.easeui.ui.EaseConversationListFragment.EaseConversationListItemClickListener;
+import com.easemob.util.HanziToPinyin;
 import com.han.applib.controller.HXSDKHelper;
 import com.han.chat.ChatHXSDKHelper;
+import com.han.chat.Constant;
 import com.han.chat.R;
+import com.han.chat.db.InviteMessageDao;
 import com.han.chat.db.UserDao;
 import com.han.chat.domain.User;
 
@@ -38,8 +42,8 @@ public class MainActivity extends FragmentActivity implements
 		EaseContactListItemClickListener, EMEventListener {
 
 	private static final int CONCERSATION_PAGE_INDEX = 0;
-	private static final int CONTACT_PAGE_INDEX = 0;
-	private static final int SETTING_PAGE_INDEX = 0;
+	private static final int CONTACT_PAGE_INDEX = 1;
+	private static final int SETTING_PAGE_INDEX = 2;
 	public static final String MAIN = "main";
 	private TextView unReadLabel;
 	private Button[] mTabs;
@@ -52,6 +56,7 @@ public class MainActivity extends FragmentActivity implements
 	private int currentTabIndex;
 	private Fragment[] mFragments;
 	private UserDao userDao;
+	private InviteMessageDao inviteMessageDao;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -59,7 +64,8 @@ public class MainActivity extends FragmentActivity implements
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		setContentView(R.layout.activity_main);
 		initView();
-
+		
+		inviteMessageDao = new InviteMessageDao(this);
 		userDao = new UserDao(this);
 
 		conversationListFragment = new EaseConversationListFragment();
@@ -166,7 +172,7 @@ public class MainActivity extends FragmentActivity implements
 					.getInstance()).getContactList();
 			Map<String, User> newUsers = new HashMap<String, User>();
 			for (String username : usernameList) {
-				User user = new User(username);
+				User user = setUserHead(username);
 				user.setHeader(username);
 				if (!localUsers.containsKey(username)) {
 					userDao.saveContact(user);
@@ -278,4 +284,27 @@ public class MainActivity extends FragmentActivity implements
 
 		}
 	}
+	private User setUserHead(String username) {
+		User user = new User(username);
+		String headerName = null;
+		if (!TextUtils.isEmpty(user.getNick())) {
+			headerName = user.getNick();
+		} else {
+			headerName = username;
+		}
+		if (Constant.NEW_FRIENDS_USERNAME.equals(username)) {
+			user.setHeader("");
+		} else if (Character.isDigit(headerName.charAt(0))) {
+			user.setHeader("#");
+		} else {
+			user.setHeader(HanziToPinyin.getInstance().get(headerName.substring(0, 1)).get(0).target.substring(0, 1).toUpperCase());
+			char header = user.getHeader().toLowerCase().charAt(0);
+			if (header <'a' || header > 'z') {
+				user.setHeader("#");
+			}
+		}
+		
+		return user;
+	}
+
 }

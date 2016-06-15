@@ -15,14 +15,14 @@ public class DbOpenHelper extends SQLiteOpenHelper{
 			+ UserDao.TABLE_NAME + " ("
 			+ UserDao.COLUMN_NAME_NICK + " TEXT, "
 			+ UserDao.COLUMN_NAME_AVATAR + " TEXT, "
-			+ UserDao.COLUMN_NAME_ID +"TEXT PRIMARY KEY";
+			+ UserDao.COLUMN_NAME_ID +"TEXT PRIMARY KEY);";
 	
 	private static final String INIVTE_MESSAGE_TABLE_CREATE = "CREATE TABLE "
 			+ InviteMessageDao.TABLE_NAME + " ("
 			+ InviteMessageDao.COLUMN_NAME_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
 			+ InviteMessageDao.COLUMN_NAME_FROM + " TEXT, "
 			+ InviteMessageDao.COLUMN_NAME_GROUP_ID + " TEXT, "
-			+ InviteMessageDao.COLUMN_NAME_GROUP_Name + " TEXT, "
+			+ InviteMessageDao.COLUMN_NAME_GROUP_NAME + " TEXT, "
 			+ InviteMessageDao.COLUMN_NAME_REASON + " TEXT, "
 			+ InviteMessageDao.COLUMN_NAME_STATUS + " INTEGER, "
 			+ InviteMessageDao.COLUMN_NAME_ISINVITEFROMME + " INTEGER, "
@@ -56,7 +56,10 @@ public class DbOpenHelper extends SQLiteOpenHelper{
 
 	@Override
 	public void onCreate(SQLiteDatabase db) {
-		
+		db.execSQL(CREATE_PREF_TABLE);
+		db.execSQL(INIVTE_MESSAGE_TABLE_CREATE);
+		db.execSQL(ROBOT_TABLE_CREATE);
+		db.execSQL(USERNAME_TALBE_CREATE);
 	}
 
 	@Override
@@ -64,4 +67,16 @@ public class DbOpenHelper extends SQLiteOpenHelper{
 		
 	}
 
+	
+	public void closeDB(){
+		if(instance != null){
+			try {
+				SQLiteDatabase db = instance.getWritableDatabase();
+				db.close();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			instance = null;
+		}
+	}		
 }

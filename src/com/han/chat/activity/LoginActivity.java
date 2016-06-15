@@ -1,6 +1,8 @@
 package com.han.chat.activity;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import android.app.Activity;
@@ -26,9 +28,9 @@ import com.han.chat.ChatHXSDKHelper;
 import com.han.chat.Constant;
 import com.han.chat.MiniChatApplication;
 import com.han.chat.R;
+import com.han.chat.db.UserDao;
 import com.han.chat.domain.User;
 import com.han.chat.utils.CommonUtils;
-import com.xiaomi.mipush.sdk.Constants;
 
 public class LoginActivity extends Activity {
 	private EditText usernameEditText;
@@ -132,8 +134,7 @@ public class LoginActivity extends Activity {
 								public void run() {
 									pd.dismiss();
 									MiniChatApplication.getInstance().logout(true, null);
-									Toast.makeText(getApplicationContext(),
-											R.string.login_failure_failed,
+									Toast.makeText(getApplicationContext(), R.string.login_failure_failed,
 											Toast.LENGTH_LONG).show();
 								}
 							});
@@ -208,12 +209,18 @@ public class LoginActivity extends Activity {
 		userlist.put(Constant.GROUP_USERNAME, groupUser);
 
 		// 添加“Robot”,do something
+		User robotUser = new User();
+		robotUser.setUsername(Constant.CHAT_ROBOT);
+		String strRobot = getResources().getString(R.string.robot_chat);
+		robotUser.setNick(strRobot );
 
 		// 存入内存
 		((ChatHXSDKHelper) HXSDKHelper.getInstance()).setContactList(userlist);
 
 		// 存入db,调用sqlite
-
+		UserDao userDao = new UserDao(LoginActivity.this);
+		List<User> users = new ArrayList<User>(userlist.values());
+		userDao.saveContactList(users);
 	}
 
 	public void register(View view) {
